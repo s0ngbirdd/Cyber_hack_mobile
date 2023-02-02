@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -5127185044440739953}
   m_Layer: 6
   m_Name: Changeable
-  m_TagString: Untagged
+  m_TagString: Changeable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -146,6 +146,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8060f17a06f2b44d850d8ca9e7651c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spritePlayer: {fileID: 0}
-  _spriteEnemy: {fileID: 0}
-  _spriteOpen: {fileID: 0}
+  _timeBeforeSpriteChange: 1
+  _timeBeforeDeactivation: 0.1

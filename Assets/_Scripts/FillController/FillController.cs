@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class Filling : MonoBehaviour
+public class FillController : MonoBehaviour
 {
     // Serialize
     [SerializeField] private Image _fillBarImage;

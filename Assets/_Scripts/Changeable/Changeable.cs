@@ -31,7 +31,7 @@ public class Changeable : MonoBehaviour
 
     private void Update()
     {
-        if (_isCoroutineEnd)
+        if (_isCoroutineEnd && !_isDeactivated)
         {
             _coroutineChangeSprite = StartCoroutine(ChangeSprite());
             _isCoroutineEnd = false;

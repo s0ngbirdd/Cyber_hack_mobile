@@ -1,15 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-public class PathMove : MonoBehaviour
+public class CameraPathMove : MonoBehaviour
 {
     // Serialize
     [SerializeField] private float _moveSpeed;
-    [SerializeField] private float _timeToWait = 0.1f;
+    [SerializeField] private float _timeToFindPoint = 0.1f;
 
     // Private
     private Transform _movePoint;
-    private int _targetCount = 0;
+    private int _targetNumber = 0;
 
     private void Start()
     {
@@ -27,11 +27,9 @@ public class PathMove : MonoBehaviour
 
             if (Vector2.Distance(transform.position, _movePoint.position) <= 0)
             {
-                //Debug.Log("__POINT__");
-
-                if (GameObject.Find($"target{_targetCount + 1}"))
+                if (GameObject.Find($"target{_targetNumber + 1}"))
                 {
-                    _movePoint = GameObject.Find($"target{++_targetCount}").transform;
+                    _movePoint = GameObject.Find($"target{++_targetNumber}").transform;
                 }
 
                 else
@@ -46,9 +44,9 @@ public class PathMove : MonoBehaviour
 
     public IEnumerator FindPoints()
     {
-        yield return new WaitForSeconds(_timeToWait);
+        yield return new WaitForSeconds(_timeToFindPoint);
 
-        _movePoint = GameObject.Find($"target{_targetCount}").transform;
+        _movePoint = GameObject.Find($"target{_targetNumber}").transform;
     }
 
     /*private float InstanceNumber()

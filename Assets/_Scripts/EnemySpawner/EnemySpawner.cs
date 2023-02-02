@@ -47,7 +47,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !_isDeactivated)
         {
             _clickCount += 1;
 
