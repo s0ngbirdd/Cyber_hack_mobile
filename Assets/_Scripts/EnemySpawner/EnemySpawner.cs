@@ -16,16 +16,23 @@ public class EnemySpawner : MonoBehaviour
     //public int spawnCount = 0;
 
     // Serialize
-    [SerializeField] private GameObject _enemyPrefab;
+    //[SerializeField] private GameObject _enemyPrefab;
+
     //[SerializeField] private GameObject _deactivated;
     //[SerializeField] private Sprite _spriteDeactivated;
     [SerializeField] private float _timeBetweenSpawn = 10.0f;
 
+    [SerializeField] private int _poolCount = 3;
+    [SerializeField] private bool _autoExpand;
+    [SerializeField] private Enemy _enemyPrefab;
+
     //Private
-    private GameObject[] _enemyArray = new GameObject[3];
-    private bool _canSpawnEnemy = true;
-    private int _spawnEnemyIndex = 0;
-    private GameObject _enemyObject;
+    //private GameObject[] _enemyArray = new GameObject[3];
+    //private Enemy[] _enemyArray = new Enemy[3];
+    //private bool _canSpawnEnemy = true;
+    //private int _spawnEnemyIndex = 0;
+    //private GameObject _enemyObject;
+    //private Enemy _enemyObject;
     private Direction _direction;
     private bool _isCoroutineEnd;
     private int _clickCount = 0;
@@ -35,6 +42,8 @@ public class EnemySpawner : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private Color _deactivatedColor = Color.grey;
 
+    private PoolMono<Enemy> _enemyPool;
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -42,6 +51,9 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
+        _enemyPool = new PoolMono<Enemy>(_enemyPrefab, _poolCount, transform);
+        _enemyPool.AutoExpand = _autoExpand;
+
         ChooseDirection();
     }
 
@@ -75,7 +87,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public IEnumerator EnemySpawn()
+    private IEnumerator EnemySpawn()
     {
         yield return new WaitForSeconds(_timeBetweenSpawn);
 
@@ -101,9 +113,10 @@ public class EnemySpawner : MonoBehaviour
             }
         }*/
 
-        for (int i = 0; i < _enemyArray.Length; i++)
+        /*for (int i = 0; i < _enemyArray.Length; i++)
         {
-            if (_enemyArray[i] == null)
+            //if (_enemyArray[i] == null)
+            if (!_enemyArray[i].gameObject.activeSelf)
             {
                 _canSpawnEnemy = true;
                 _spawnEnemyIndex = i;
@@ -113,35 +126,80 @@ public class EnemySpawner : MonoBehaviour
             {
                 _canSpawnEnemy = false;
             }
-        }
+        }*/
 
-        if (_canSpawnEnemy)
-        {
-            switch (_direction)
+        //if (_canSpawnEnemy)
+        //{
+            /*switch (_direction)
             {
                 case Direction.RIGHT:
-                    _enemyObject = Instantiate(_enemyPrefab, new Vector2(transform.position.x + 1, transform.position.y), Quaternion.identity);
+                    Enemy enemyRight = _enemyPool.GetFreeElement();
+                    enemyRight.transform.position = new Vector2(transform.position.x + 1, transform.position.y);
+                    //_enemyObject = Instantiate(_enemyPrefab, new Vector2(transform.position.x + 1, transform.position.y), Quaternion.identity);
                     //_enemyObject.transform.SetParent(levelGenerator.transform, true);
-                    _enemyArray[_spawnEnemyIndex] = _enemyObject;
+                    //_enemyArray[_spawnEnemyIndex] = _enemyObject;
                     break;
 
                 case Direction.LEFT:
-                    _enemyObject = Instantiate(_enemyPrefab, new Vector2(transform.position.x - 1, transform.position.y), Quaternion.identity);
+                    Enemy enemyLeft = _enemyPool.GetFreeElement();
+                    enemyLeft.transform.position = new Vector2(transform.position.x - 1, transform.position.y);
+                    //_enemyObject = Instantiate(_enemyPrefab, new Vector2(transform.position.x - 1, transform.position.y), Quaternion.identity);
                     //_enemyObject.transform.SetParent(levelGenerator.transform, true);
-                    _enemyArray[_spawnEnemyIndex] = _enemyObject;
+                    //_enemyArray[_spawnEnemyIndex] = _enemyObject;
                     break;
 
                 case Direction.UP:
-                    _enemyObject = Instantiate(_enemyPrefab, new Vector2(transform.position.x, transform.position.y + 1), Quaternion.identity);
+                    Enemy enemyUp = _enemyPool.GetFreeElement();
+                    enemyUp.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+                    //_enemyObject = Instantiate(_enemyPrefab, new Vector2(transform.position.x, transform.position.y + 1), Quaternion.identity);
                     //_enemyObject.transform.SetParent(levelGenerator.transform, true);
-                    _enemyArray[_spawnEnemyIndex] = _enemyObject;
+                    //_enemyArray[_spawnEnemyIndex] = _enemyObject;
                     break;
 
                 case Direction.DOWN:
-                    _enemyObject = Instantiate(_enemyPrefab, new Vector2(transform.position.x, transform.position.y - 1), Quaternion.identity);
+                    Enemy enemyDown = _enemyPool.GetFreeElement();
+                    enemyDown.transform.position = new Vector2(transform.position.x, transform.position.y - 1);
+                    //_enemyObject = Instantiate(_enemyPrefab, new Vector2(transform.position.x, transform.position.y - 1), Quaternion.identity);
                     //_enemyObject.transform.SetParent(levelGenerator.transform, true);
-                    _enemyArray[_spawnEnemyIndex] = _enemyObject;
+                    //_enemyArray[_spawnEnemyIndex] = _enemyObject;
                     break;
+            }*/
+        //}
+
+        if (_direction.Equals(Direction.RIGHT))
+        {
+            Enemy enemy = _enemyPool.GetFreeElement();
+            //_enemyPool.HasFreeElement(out Enemy enemy);
+            if (enemy != null)
+            {
+                enemy.transform.position = new Vector2(transform.position.x + 1, transform.position.y);
+            }
+        }
+        else if (_direction.Equals(Direction.LEFT))
+        {
+            Enemy enemy = _enemyPool.GetFreeElement();
+            //_enemyPool.HasFreeElement(out Enemy enemy);
+            if (enemy != null)
+            {
+                enemy.transform.position = new Vector2(transform.position.x - 1, transform.position.y);
+            }
+        }
+        else if (_direction.Equals(Direction.UP))
+        {
+            Enemy enemy = _enemyPool.GetFreeElement();
+            //_enemyPool.HasFreeElement(out Enemy enemy);
+            if (enemy != null)
+            {
+                enemy.transform.position = new Vector2(transform.position.x, transform.position.y + 1);
+            }
+        }
+        else if (_direction.Equals(Direction.DOWN))
+        {
+            Enemy enemy = _enemyPool.GetFreeElement();
+            //_enemyPool.HasFreeElement(out Enemy enemy);
+            if (enemy != null)
+            {
+                enemy.transform.position = new Vector2(transform.position.x, transform.position.y - 1);
             }
         }
 

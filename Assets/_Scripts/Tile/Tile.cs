@@ -89,6 +89,26 @@ public class Tile : MonoBehaviour
 
             _occupied.SetActive(true);
         }
-        
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag.Equals("Enemy"))
+        {
+            if (_highlight.activeSelf)
+            {
+                _highlight.SetActive(false);
+
+                /*if (Fill.currentPos >= 1)
+                {
+                    Fill.currentPos -= 1;
+                    Debug.Log("Fill.currentPos - >>> " + Fill.currentPos);
+                }*/
+
+                _fillController.DecreaseCurrentFill();
+            }
+
+            _occupied.SetActive(true);
+        }
     }
 }

@@ -17,49 +17,59 @@ public class Enemy : MonoBehaviour
     private RaycastHit2D _raycastHit;
     private Color _rayColor = Color.black;
 
+    private bool _isDestructible = true;
+
     private void Awake()
     {
         _collider2D = GetComponent<BoxCollider2D>();
     }
 
-    private void Start()
+    private void OnEnable()
     {
         _direction = (Direction)Random.Range(1, 5);
         _raycastHit = Physics2D.Raycast(_collider2D.bounds.center, Vector2.zero, _collider2D.bounds.extents.x, _wallLayerMask);
+        _isCoroutineEnd = true;
     }
+
+    /*private void Start()
+    {
+        _direction = (Direction)Random.Range(1, 5);
+        _raycastHit = Physics2D.Raycast(_collider2D.bounds.center, Vector2.zero, _collider2D.bounds.extents.x, _wallLayerMask);
+    }*/
 
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && _isDestructible)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
     private void Update()
     {
-        if (_direction == Direction.RIGHT && !IsWall(Direction.RIGHT) && _isCoroutineEnd)
+        if (_direction.Equals(Direction.RIGHT) && !IsWall(Direction.RIGHT) && _isCoroutineEnd)
         {
             //StartCoroutine(MoveRight());
             StartCoroutine(Move(1, 0));
             _isCoroutineEnd = false;
             //transform.position = new Vector2(transform.position.x + 0.01f, transform.position.y);
         }
-        else if (_direction == Direction.LEFT && !IsWall(Direction.LEFT) && _isCoroutineEnd)
+        else if (_direction.Equals(Direction.LEFT) && !IsWall(Direction.LEFT) && _isCoroutineEnd)
         {
             //StartCoroutine(MoveLeft());
             StartCoroutine(Move(-1, 0));
             _isCoroutineEnd = false;
             //transform.position = new Vector2(transform.position.x - 0.01f, transform.position.y);
         }
-        else if (_direction == Direction.UP && !IsWall(Direction.UP) && _isCoroutineEnd)
+        else if (_direction.Equals(Direction.UP) && !IsWall(Direction.UP) && _isCoroutineEnd)
         {
             //StartCoroutine(MoveUp());
             StartCoroutine(Move(0, 1));
             _isCoroutineEnd = false;
             //transform.position = new Vector2(transform.position.x, transform.position.y + 0.01f);
         }
-        else if (_direction == Direction.DOWN && !IsWall(Direction.DOWN) && _isCoroutineEnd)
+        else if (_direction.Equals(Direction.DOWN) && !IsWall(Direction.DOWN) && _isCoroutineEnd)
         {
             //StartCoroutine(MoveDown());
             StartCoroutine(Move(0, -1));
@@ -68,7 +78,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public IEnumerator Move(float xOffset, float yOffset)
+    private IEnumerator Move(float xOffset, float yOffset)
     {
         yield return new WaitForSeconds(_timeBetweenMove);
 
@@ -109,7 +119,7 @@ public class Enemy : MonoBehaviour
         _isCoroutineEnd = true;
     }*/
 
-    public bool IsWall(Direction dir)
+    private bool IsWall(Direction dir)
     {
         switch (dir)
         {
@@ -172,5 +182,15 @@ public class Enemy : MonoBehaviour
             default:
                 return _raycastHit.collider != null;
         }
+    }
+
+    public void ChangeTimeBetweenMove(float time)
+    {
+        _timeBetweenMove = time;
+    }
+
+    public void ChangeDestructibleType(bool type)
+    {
+        _isDestructible = type;
     }
 }

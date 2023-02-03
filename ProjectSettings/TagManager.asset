@@ -16,7 +16,7 @@ TagManager:
   - Water
   - UI
   - Wall
-  - 
+  - Zone
   - 
   - 
   - 
@@ -44,4 +44,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Zone
+    uniqueID: 1022587513
     locked: 0

@@ -42,7 +42,10 @@ public class Changeable : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && !_isDeactivated)
         {
-            _collider2D.size = new Vector2(3, 3);
+            int randomX = Random.Range(1, 4);
+            int randomY = Random.Range(1, 4);
+            _collider2D.size = new Vector2(randomX, randomY);
+            //_collider2D.size = new Vector2(3, 3);
 
             StopCoroutine(_coroutineChangeSprite);
             StartCoroutine(Deactivate());
@@ -51,7 +54,7 @@ public class Changeable : MonoBehaviour
         }
     }
 
-    public IEnumerator ChangeSprite()
+    private IEnumerator ChangeSprite()
     {
         yield return new WaitForSeconds(_timeBeforeSpriteChange);
 
@@ -76,7 +79,7 @@ public class Changeable : MonoBehaviour
         _isCoroutineEnd = true;
     }
 
-    public IEnumerator Deactivate()
+    private IEnumerator Deactivate()
     {
         yield return new WaitForSeconds(_timeBeforeDeactivation);
 

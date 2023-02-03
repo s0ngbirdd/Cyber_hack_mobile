@@ -42,7 +42,7 @@ public class CameraPathMove : MonoBehaviour
         }
     }
 
-    public IEnumerator FindPoints()
+    private IEnumerator FindPoints()
     {
         yield return new WaitForSeconds(_timeToFindPoint);
 
